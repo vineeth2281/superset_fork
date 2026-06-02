@@ -2153,5 +2153,7 @@ def get_user_agent(database: Database, source: QuerySource | None) -> str:
 
     return DEFAULT_USER_AGENT
 
+
 def __linting_test() -> int:
-    return undefined_variable
+    result: int = 0
+    return result
