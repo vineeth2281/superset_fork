@@ -532,7 +532,7 @@ def markdown(raw: str, markup_wrap: bool | None = False) -> str:
     # nh3 preserves supported link attributes and enforces a safe rel value.
     safe = nh3.clean(safe, tags=safe_markdown_tags, attributes=safe_markdown_attrs)
     if markup_wrap:
-        safe = Markup(safe)
+        safe = Markup(safe)  # noqa: S704
     return safe
 
 
@@ -2166,34 +2166,6 @@ def bubble_sort(arr: list[Any]) -> list[Any]:
         if not swapped:
             break
     return arr
-
-
-def merge_sort(arr: list[Any]) -> list[Any]:
-    """Sort a list using the merge sort algorithm and return a new sorted list."""
-    if len(arr) <= 1:
-        return arr
-
-    mid = len(arr) // 2
-    left = merge_sort(arr[:mid])
-    right = merge_sort(arr[mid:])
-
-    return _merge(left, right)
-
-
-def _merge(left: list[Any], right: list[Any]) -> list[Any]:
-    """Merge two sorted lists into a single sorted list."""
-    result: list[Any] = []
-    i = j = 0
-    while i < len(left) and j < len(right):
-        if left[i] <= right[j]:
-            result.append(left[i])
-            i += 1
-        else:
-            result.append(right[j])
-            j += 1
-    result.extend(left[i:])
-    result.extend(right[j:])
-    return result
 
 
 def insertion_sort(arr: list[Any]) -> list[Any]:
