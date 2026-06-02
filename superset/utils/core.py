@@ -2152,3 +2152,6 @@ def get_user_agent(database: Database, source: QuerySource | None) -> str:
         return user_agent_func(database, source)
 
     return DEFAULT_USER_AGENT
+
+def linting: 
+return unamed_variable
