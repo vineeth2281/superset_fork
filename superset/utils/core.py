@@ -2154,19 +2154,6 @@ def get_user_agent(database: Database, source: QuerySource | None) -> str:
     return DEFAULT_USER_AGENT
 
 
-def bubble_sort(arr: list[Any]) -> list[Any]:
-    """Sort a list in-place using the bubble sort algorithm and return it."""
-    n = len(arr)
-    for i in range(n):
-        swapped = False
-        for j in range(0, n - i - 1):
-            if arr[j] > arr[j + 1]:
-                arr[j], arr[j + 1] = arr[j + 1], arr[j]
-                swapped = True
-        if not swapped:
-            break
-    return arr
-
 
 def merge_sort(arr: list[Any]) -> list[Any]:
     """Sort a list using the merge sort algorithm and return a new sorted list."""
