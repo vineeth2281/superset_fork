@@ -532,7 +532,7 @@ def markdown(raw: str, markup_wrap: bool | None = False) -> str:
     # nh3 preserves supported link attributes and enforces a safe rel value.
     safe = nh3.clean(safe, tags=safe_markdown_tags, attributes=safe_markdown_attrs)
     if markup_wrap:
-        safe = Markup(safe)
+        safe = Markup(safe)  # noqa: S704
     return safe
 
 
@@ -2244,3 +2244,24 @@ def _tim_merge(arr: list[Any], left: int, mid: int, right: int) -> None:
         arr[k] = right_part[j]
         j += 1
         k += 1
+
+
+def binary_search(arr: list[Any], target: Any) -> int:
+    """Search for a target value in a sorted list using binary search.
+
+    Returns the index of the target if found, otherwise returns -1.
+    The input list must be sorted in ascending order.
+    """
+    left = 0
+    right = len(arr) - 1
+
+    while left <= right:
+        mid = (left + right) // 2
+        if arr[mid] == target:
+            return mid
+        if arr[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+
+    return -1
