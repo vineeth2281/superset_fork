@@ -2154,7 +2154,6 @@ def get_user_agent(database: Database, source: QuerySource | None) -> str:
     return DEFAULT_USER_AGENT
 
 
-
 def merge_sort(arr: list[Any]) -> list[Any]:
     """Sort a list using the merge sort algorithm and return a new sorted list."""
     if len(arr) <= 1:
@@ -2183,5 +2182,65 @@ def _merge(left: list[Any], right: list[Any]) -> list[Any]:
     return result
 
 
+def tim_sort(arr: list[Any]) -> list[Any]:
+    """Sort a list using the Timsort algorithm and return a new sorted list.
+
+    Timsort identifies natural runs in the data, extends short runs using
+    insertion sort to a minimum run length, then merges the runs pairwise.
+    """
+    min_run = 32
+    result = list(arr)
+    n = len(result)
+
+    for start in range(0, n, min_run):
+        end = min(start + min_run - 1, n - 1)
+        _insertion_sort(result, start, end)
+
+    size = min_run
+    while size < n:
+        for left_start in range(0, n, 2 * size):
+            mid = min(n - 1, left_start + size - 1)
+            right_end = min(left_start + 2 * size - 1, n - 1)
+            if mid < right_end:
+                _tim_merge(result, left_start, mid, right_end)
+        size *= 2
+
+    return result
 
 
+def _insertion_sort(arr: list[Any], left: int, right: int) -> None:
+    """Sort a sub-array in place using insertion sort."""
+    for i in range(left + 1, right + 1):
+        key = arr[i]
+        j = i - 1
+        while j >= left and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key
+
+
+def _tim_merge(arr: list[Any], left: int, mid: int, right: int) -> None:
+    """Merge two adjacent sorted sub-arrays in place."""
+    left_part = arr[left : mid + 1]
+    right_part = arr[mid + 1 : right + 1]
+
+    i = j = 0
+    k = left
+    while i < len(left_part) and j < len(right_part):
+        if left_part[i] <= right_part[j]:
+            arr[k] = left_part[i]
+            i += 1
+        else:
+            arr[k] = right_part[j]
+            j += 1
+        k += 1
+
+    while i < len(left_part):
+        arr[k] = left_part[i]
+        i += 1
+        k += 1
+
+    while j < len(right_part):
+        arr[k] = right_part[j]
+        j += 1
+        k += 1
