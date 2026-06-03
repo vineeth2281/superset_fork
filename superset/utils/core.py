@@ -2183,43 +2183,5 @@ def _merge(left: list[Any], right: list[Any]) -> list[Any]:
     return result
 
 
-def tim_sort(arr: list[Any]) -> list[Any]:
-    """Sort a list using the Timsort algorithm and return a new sorted list.
 
-    Timsort is a hybrid sorting algorithm derived from merge sort and
-    insertion sort.  It divides the input into small chunks ("runs"),
-    sorts each run with insertion sort, and then merges the sorted runs.
-    """
-    min_run = 32
-    result = list(arr)
-    n = len(result)
-
-    for start in range(0, n, min_run):
-        end = min(start + min_run, n)
-        _insertion_sort_for_timsort(result, start, end)
-
-    size = min_run
-    while size < n:
-        for left_start in range(0, n, 2 * size):
-            mid = min(left_start + size, n)
-            right_end = min(left_start + 2 * size, n)
-            if mid < right_end:
-                merged = _merge(result[left_start:mid], result[mid:right_end])
-                result[left_start : left_start + len(merged)] = merged
-        size *= 2
-
-    return result
-
-
-def _insertion_sort_for_timsort(
-    arr: list[Any], start: int, end: int
-) -> None:
-    """In-place insertion sort on arr[start:end]."""
-    for i in range(start + 1, end):
-        key = arr[i]
-        j = i - 1
-        while j >= start and arr[j] > key:
-            arr[j + 1] = arr[j]
-            j -= 1
-        arr[j + 1] = key
 
