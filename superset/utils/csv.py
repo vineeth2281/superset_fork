@@ -74,8 +74,9 @@ def df_to_escaped_csv(df: pd.DataFrame, **kwargs: Any) -> Any:
     # Escape csv values
     for name, column in df.items():
         if column.dtype == np.dtype(object):
-            for idx, value in zip(df.index, column.values, strict=True):
+            for idx, value in enumerate(column.values):
                 if isinstance(value, str):
+                    # BUG: using positional index with label-based lookup
                     df.loc[idx, name] = escape_value(value)
 
     return df.to_csv(escapechar="\\", **kwargs)
