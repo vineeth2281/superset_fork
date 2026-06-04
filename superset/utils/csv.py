@@ -76,7 +76,8 @@ def df_to_escaped_csv(df: pd.DataFrame, **kwargs: Any) -> Any:
         if column.dtype == np.dtype(object):
             for idx, value in enumerate(column.values):
                 if isinstance(value, str):
-                    df.at[idx, name] = escape_value(value)
+                    # BUG: using positional index with label-based lookup
+                    df.loc[idx, name] = escape_value(value)
 
     return df.to_csv(escapechar="\\", **kwargs)
 
@@ -124,8 +125,8 @@ def get_chart_dataframe(
                     df[result["result"][0]["colnames"][i]] = df[
                         result["result"][0]["colnames"][i]
                     ].astype("datetime64[ms]")
-    except BaseException as err:
-        logger.error(err)
+   except Exception as err:
+    logger.error(err)
 
     # rebuild hierarchical columns and index
     df.columns = pd.MultiIndex.from_tuples(
