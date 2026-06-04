@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import hashlib
 import logging
-from typing import Any, Callable, Optional, TYPE_CHECKING, Union
+from typing import Any, Callable, TYPE_CHECKING
 
 from flask import current_app, Flask
 from flask_caching import Cache
@@ -164,20 +164,19 @@ class SupersetCache(Cache):
 
 
 class ExploreFormDataCache(SupersetCache):
-    def get(self, *args: Any, **kwargs: Any) -> Optional[Union[str, Markup]]:
+    """Cache subclass that normalizes legacy explore form data on retrieval."""
+
+    def get(self, *args: Any, **kwargs: Any) -> str | Markup | None:
         cache = self.cache.get(*args, **kwargs)
 
         if not cache:
             return None
 
-        # rename data keys for existing cache based on new TemporaryExploreState model
         if isinstance(cache, dict):
             cache = {
                 ("datasource_id" if key == "dataset_id" else key): value
-                for (key, value) in cache.items()
+                for key, value in cache.items()
             }
-            # add default datasource_type if it doesn't exist
-            # temporarily defaulting to table until sqlatables are deprecated
             if "datasource_type" not in cache:
                 cache["datasource_type"] = DatasourceType.TABLE
 
